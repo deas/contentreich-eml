@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.contentreich</groupId>
+  <artifactId>contentreich-eml</artifactId>
+  <packaging>pom</packaging>
+  <name>Contentreich Alfresco EML</name>
+  <version>1.0</version>
+     <parent>
+        <groupId>org.alfresco.maven</groupId>
+        <artifactId>alfresco-sdk-parent</artifactId>
+        <version>1.1.1</version>
+     </parent>
+<prerequisites>
+  <maven>3.0.4</maven>
+</prerequisites>
+
+  <properties>
+    <alfresco.groupId>org.alfresco</alfresco.groupId>
+    <alfresco.version>4.2.e</alfresco.version>
+    <alfresco.share.version>4.2.e</alfresco.share.version>
+    <alfresco.repo.version>4.2.e</alfresco.repo.version>
+    <spring.version>3.0.6.RELEASE</spring.version>
+    <env>local</env>
+    <spring.surf.version>1.2.0-M14</spring.surf.version>
+  </properties>
+  <description>
+        Parent project for Contentreich EML
+    </description>
+  <organization>
+    <name>Andreas Steffan</name>
+    <url>http://www.contentreich.de</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>deas</id>
+      <name>Andreas Steffan</name>
+      <email>a.steffan@contentreich.de</email>
+      <url>http://www.contentreich.de</url>
+      <timezone>+1</timezone>
+      <!--properties>
+                <picUrl></picUrl >
+            </properties-->
+    </developer>
+  </developers>
+  <!--scm>
+    <connection>scm:git:git://github.com/deas/fme-alfresco-extdl.git</connection>
+    <developerConnection>scm:git:git://github.com/deas/fme-alfresco-extdl</developerConnection>
+    <url>http://github.com/deas/fme-alfresco-extdl</url>
+  </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/deas/fme-alfresco-extdl/issues</url>
+  </issueManagement-->
+  <modules>
+    <module>contentreich-eml-repo</module>
+    <module>contentreich-eml-share</module>
+  </modules>
+  <repositories>
+    <repository>
+      <id>alfresco-public</id>
+      <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+    </repository>
+    <!-- required for spring webscripts 1.2.0 -->
+    <repository>
+      <id>alfresco-public-snapshots</id>
+      <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>alfresco-snapshot</id>
+      <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+    </pluginRepository>
+  </pluginRepositories>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${alfresco.groupId}</groupId>
+                <artifactId>alfresco-platform-distribution</artifactId>
+                <version>${alfresco.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${alfresco.groupId}</groupId>
+      <artifactId>alfresco-core</artifactId>
+      <version>${alfresco.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>${alfresco.groupId}</groupId>
+      <artifactId>alfresco-repository</artifactId>
+      <version>${alfresco.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>${alfresco.groupId}</groupId>
+      <artifactId>alfresco-data-model</artifactId>
+      <version>${alfresco.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>${alfresco.groupId}</groupId>
+      <artifactId>alfresco-remote-api</artifactId>
+      <version>${alfresco.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.extensions.surf</groupId>
+      <artifactId>spring-webscripts</artifactId>
+      <version>${spring.surf.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.extensions.surf</groupId>
+      <artifactId>spring-webscripts-api</artifactId>
+      <version>${spring.surf.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.extensions.surf</groupId>
+      <artifactId>spring-surf-core</artifactId>
+      <version>${spring.surf.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.extensions.surf</groupId>
+      <artifactId>spring-surf</artifactId>
+      <version>${spring.surf.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!--dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+      <version>${spring.version}</version>
+      <scope>provided</scope--><!-- not really -->
+    <!--/dependency-->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+      <version>${spring.version}</version>
+      <!--version>3.1.0.RELEASE</version--><!-- actually 3.1.0.RC for 4.2.b -->
+      <scope>provided</scope><!-- not really -->
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20090211</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1</version>
+      <scope>provided</scope>
+      </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.14</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <pluginManagement>
+      <plugins>
+	<plugin>
+	  <artifactId>maven-jar-plugin</artifactId>
+	  <configuration>
+	    <archive>
+	      <addMavenDescriptor>false</addMavenDescriptor>
+	    </archive>
+	  </configuration>
+	</plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+<reporting>
+  <plugins>
+    <!--
+ http://stackoverflow.com/questions/786552/how-do-i-upgrade-the-version-of-a-maven-plugin
+
+ mvn versions:display-plugin-updates
+ mvn versions:display-dependency-updates
+ mvn versions:display-property-updates
+
+ -->
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>versions-maven-plugin</artifactId>
+      <version>1.3.1</version>
+      <reportSets>
+        <reportSet>
+          <reports>
+            <report>dependency-updates-report</report>
+            <report>plugin-updates-report</report>
+            <report>property-updates-report</report>
+          </reports>
+        </reportSet>
+      </reportSets>
+    </plugin>
+  </plugins>
+</reporting>
+</project>

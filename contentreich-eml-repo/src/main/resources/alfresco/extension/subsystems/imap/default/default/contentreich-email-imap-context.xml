@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    <bean id="attachmentsExtractor" class="de.contentreich.alfresco.repo.email.ExtendedAttachmentExtractor" init-method="init">
+        <property name="fileFolderService">
+            <ref bean="FileFolderService"/>
+        </property>
+        <property name="nodeService">
+            <ref bean="NodeService"/>
+        </property>
+        <property name="imapService">
+            <ref bean="imapService"/>
+        </property>
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry"/>
+        </property>
+        <property name="attachmentsFolder">
+            <ref bean="imap.attachments.folder" />
+        </property>
+        <property name="attachmentsExtractorMode">
+            <value>${imap.attachments.mode}</value>
+        </property>
+        <property name="dispExtractRE" value="${contentreich.email.imap.attachment.dispExtractRE}"/>
+        <property name="hideAttachmentFolders" value="${contentreich.email.imap.attachment.hideAttachmentFolders}"/>
+    </bean>
+
+    <bean id="usernamePropertiesDecorator" parent="baseDecorator" class="de.contentreich.alfresco.repo.email.EmlAttachmentPropertyDecorator">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="propertyNames">
+            <set>
+                <value>imap:messageFrom</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="contentreich.email.imapContent"
+          class="de.contentreich.alfresco.repo.email.ImapContent"
+          init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="NodeService"/>
+    </bean>
+
+</beans>

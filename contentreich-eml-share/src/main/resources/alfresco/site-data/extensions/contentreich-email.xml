@@ -1,0 +1,88 @@
+
+<extension>
+    <modules>
+        <module>
+            <id>CR Email Preview</id>
+            <version>1.0</version>
+            <customizations>
+                <customization>
+                    <targetPackageRoot>org.alfresco.components.preview</targetPackageRoot>
+                    <sourcePackageRoot>de.contentreich.components.email</sourcePackageRoot>
+                </customization>
+                <!-- No info about mime type here :( -->
+                <!--customization>
+                    <targetPackageRoot>org.alfresco.components.node-details</targetPackageRoot>
+                    <sourcePackageRoot>de.contentreich.components.email</sourcePackageRoot>
+                </customization-->
+            </customizations>
+            <configurations>
+	      <config evaluator="string-compare" condition="DocLibCustom">
+		<dependencies>
+	        <js src="/components/documentlibrary/contentreich-email.js" />
+		</dependencies>
+	      </config>
+
+                <config evaluator="node-type" condition="cm:content">
+                <forms>
+                <!-- Default form configuration for the cm:content type -->
+                <form id="email">
+                <field-visibility>
+                    <!-- cm:emailed aspect -->
+                    <!-- props from documentlist-v2.get.properties -->
+                    <show id="cm:originator"/><!-- label-id="table.email.label.originator" -->
+                    <show id="cm:addressee" /><!-- label-id="table.email.label.addressee" -->
+                    <show id="cm:addressees" /><!-- label-id="table.email.label.addressees" -->
+                    <show id="cm:sentdate" /><!-- label-id="table.email.label.sentdate" -->
+                    <show id="cm:subjectline" /><!-- label-id="table.email.label.subjectline" -->
+                </field-visibility>
+                    <appearance>
+                        <field id="cm:originator" label-id="cr.email.table.email.label.originator"/>
+                        <field id="cm:addressee" label-id="cr.email.table.email.label.addressee"/>
+                        <field id="cm:addressees" label-id="cr.email.table.email.label.addressees"/>
+                        <field id="cm:sentdate" label-id="cr.email.table.email.label.sentdate"/>
+                        <field id="cm:subjectline" label-id="cr.email.table.email.label.subjectline">
+                         <!--control template="/org/alfresco/components/form/controls/hidden.ftl "/-->
+                        </field>
+
+                    </appearance>
+
+                </form>
+                </forms>
+                </config>
+
+                <config evaluator="string-compare" condition="DocumentLibrary">
+                    <aspects>
+                        <visible>
+                            <aspect name="sys:hidden"/>
+                        </visible>
+                    </aspects>
+                    <metadata-templates>
+                        <template id="email">
+                            <!-- documentlist-v2.get.properties -->
+                            <evaluator>evaluator.doclib.metadata.isEMailMimetype</evaluator>
+                            <banner index="10" id="lockBanner" evaluator="evaluator.doclib.metadata.hasLockBanner">{lockBanner}</banner>
+                            <banner index="20" id="syncTransientError" evaluator="evaluator.doclib.metadata.hasSyncTransientErrorBanner">{syncTransientError}</banner>
+                            <banner index="30" id="syncFailed" evaluator="evaluator.doclib.metadata.hasSyncFailedBanner">{syncFailed}</banner>
+                            <!--line index="10" id="date">{cm_description details.description}</line-->
+                            <!--line index="10" id="subject">{cm_subjectline table.email.label.subjectline}</line-->
+                            <line index="20" id="originator">{cm_originator table.email.label.originator}</line>
+                            <line index="30" id="sentdate">{cm_sentdate table.email.label.sentdate}</line>
+                            <line index="40" id="addressee">{cm_addressee table.email.label.addressee}</line>
+                        </template>
+                    </metadata-templates>
+                    <indicators>
+                        <indicator id="attachments" index="10" ><!-- icon="lock-owner-16.png" label="status.locked" -->
+                            <evaluator>evaluator.doclib.indicator.attachments</evaluator>
+                            <!--labelParam index="0">{jsNode.properties.cm_lockOwner.displayName}</labelParam>
+                            <override>locked</override-->
+                        </indicator>
+                    </indicators>
+
+                </config>
+
+            </configurations>
+            <!--auto-deploy>true</auto-deploy-->
+
+        </module>
+    </modules>
+</extension>
