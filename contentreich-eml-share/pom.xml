@@ -3,14 +3,14 @@
   <!-- export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8002" -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>contentreich-imap</artifactId>
+    <artifactId>contentreich-eml</artifactId>
     <groupId>de.contentreich</groupId>
     <version>1.0</version>
   </parent>
-  <artifactId>contentreich-imap-share</artifactId>
+  <artifactId>contentreich-eml-share</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>Contentreich Alfresco IMAP Share</name>
+  <name>Contentreich Alfresco EML Share</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,8 +21,6 @@
     <surf.mode>production<surf.mode>
 -->
 <!-- About this module only -->
-    <contentreich.ext.config.id>contentreich.config</contentreich.ext.config.id>
-    <contentreich.ext.config.path>web-extension/contentreich-config.xml</contentreich.ext.config.path>
   </properties>
   <dependencies>
     <!--dependency>
@@ -63,19 +61,6 @@
               </exclusion>
           </exclusions>
       </dependency>
-
-		<dependency>
-			<groupId>de.contentreich</groupId>
-			<artifactId>contentreich-webscripts</artifactId>
-			<version>1.1</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-		          <groupId>org.springframework.extensions.surf</groupId>
-        		  <artifactId>spring-surf</artifactId>
-        		</exclusion>
-			</exclusions>
-		</dependency>
     <dependency>
       <groupId>org.alfresco</groupId>
       <artifactId>share</artifactId>
