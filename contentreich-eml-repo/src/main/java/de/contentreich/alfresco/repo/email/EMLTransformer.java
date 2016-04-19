@@ -68,6 +68,11 @@ public class EMLTransformer extends AbstractContentTransformer2 implements Appli
 
     private boolean forceHtml;
     private Boolean html;
+    private String transformerName;
+
+    public void setTransformerName(String transformerName) {
+        this.transformerName = transformerName;
+    }
 
     // http://localhost:8080/alfresco/service/api/node/workspace/SpacesStore/e3b3da93-fbe8-4322-b0e3-8192f7686b20/metadata
     private static final Logger logger = LoggerFactory.getLogger(EMLTransformer.class);
@@ -236,7 +241,7 @@ public class EMLTransformer extends AbstractContentTransformer2 implements Appli
                 ChildApplicationContextFactory ca = (ChildApplicationContextFactory) applicationContext.getBean("Transformers");
                 if (ca != null) {
                     TransformerConfig tc = (TransformerConfig) ca.getApplicationContext().getBean("transformerConfig");
-                    emlPipeLine = tc.getProperty("content.transformer.complex.Rfc822ToSwf.pipeline");
+                    emlPipeLine = tc.getProperty(this.transformerName);
                     if (emlPipeLine != null) {
                         this.html = emlPipeLine.toLowerCase().startsWith("rfc822|html");
                     }
@@ -244,7 +249,7 @@ public class EMLTransformer extends AbstractContentTransformer2 implements Appli
                 if (this.html == null) {
                     this.html = Boolean.FALSE;
                 }
-                logger.debug("content.transformer.complex.Rfc822ToSwf.pipeline={} -> html = {}", emlPipeLine, html);
+                logger.debug("{} = {} -> html = {}", new Object[] { transformerName, emlPipeLine, html });
             }
             isHtml = this.html;
         }

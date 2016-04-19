@@ -9,6 +9,7 @@
     <bean id="transformer.RFC822"
           class="de.contentreich.alfresco.repo.email.EMLTransformer"
           parent="baseContentTransformer" >
+        <property name="transformerName" value="${contentreich.email.rfc822}"/>
         <!--property name="html" value="${contentreich.email.preview.rfc822.html}"/-->
     </bean>
 </beans>
