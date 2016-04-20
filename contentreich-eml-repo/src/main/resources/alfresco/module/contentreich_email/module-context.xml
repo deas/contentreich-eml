@@ -12,4 +12,28 @@
         <property name="transformerName" value="${contentreich.email.rfc822}"/>
         <!--property name="html" value="${contentreich.email.preview.rfc822.html}"/-->
     </bean>
+
+    <!-- Add rfc822 preview (HTML) -->
+    <bean id="contentreich.addRfc822Thumbnail" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="thumbnailRegistry"/>
+        <property name="targetMethod">
+            <value>addThumbnailDefinition</value>
+        </property>
+        <property name="arguments">
+            <list>
+                <bean class="org.alfresco.repo.thumbnail.ThumbnailDefinition">
+                    <property name="name" value="rfc822" />
+                    <!-- property name="mimetype" value="application/pdf" /-->
+                    <property name="mimetype" value="text/html" />
+                    <property name="transformationOptions">
+                        <!-- The thumbnail definition have transformationOptions mandatory -->
+                        <!-- But there are none for pdf, so use SWFTransformationsOptions as a dummy -->
+                        <bean class="org.alfresco.repo.content.transform.swf.SWFTransformationOptions">
+                            <property name="flashVersion" value="9" />
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
 </beans>

@@ -1,22 +1,4 @@
 package de.contentreich.alfresco.repo.email;
-/*
- * Copyright (C) 2005-2012 Alfresco Software Limited.
- *
- * This file is part of Alfresco
- *
- * Alfresco is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Alfresco is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- */
 
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.content.transform.AbstractContentTransformer2;
@@ -25,7 +7,6 @@ import org.alfresco.repo.management.subsystems.ChildApplicationContextFactory;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.TransformationOptions;
-import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -43,38 +24,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-// package org.alfresco.repo.content.transform;
-
-/**
- * Uses javax.mail.MimeMessage to generate plain text versions of RFC822 email
- * messages. Searches for all text content parts, and returns them. Any
- * attachments are ignored. TIKA Note - could be replaced with the Tika email
- * parser. Would require a recursing parser to be specified, but not the full
- * Auto one (we don't want attachments), just one containing text and html
- * related parsers.
- * <p/>
- * web-preview.get.js ->
- * <p/>
- * http://localhost:8080/alfresco/service/api/node/workspace/SpacesStore/e3b3da93-fbe8-4322-b0e3-8192f7686b20/metadata
- * <p/>
- * ->
- * <p/>
- * {
- * "mimetype": "message\/rfc822",
- * }
- */
 public class EMLTransformer extends AbstractContentTransformer2 implements ApplicationContextAware {
+    private String transformerName;
     private ApplicationContext applicationContext;
 
     private boolean forceHtml;
     private Boolean html;
-    private String transformerName;
 
     public void setTransformerName(String transformerName) {
         this.transformerName = transformerName;
     }
 
-    // http://localhost:8080/alfresco/service/api/node/workspace/SpacesStore/e3b3da93-fbe8-4322-b0e3-8192f7686b20/metadata
     private static final Logger logger = LoggerFactory.getLogger(EMLTransformer.class);
 
     public void setForceHtml(boolean html) {
@@ -110,30 +70,7 @@ public class EMLTransformer extends AbstractContentTransformer2 implements Appli
             // final Icu4jEncodingDetector encodingDetector = new Icu4jEncodingDetector();
             // final Charset charset = encodingDetector.detect(tikaInputStream, new Metadata());
 
-            // MimeMessage mimeMessage = new MimeMessage(Session.getDefaultInstance(new Properties()), tikaInputStream);
-            MimeMessage mimeMessage = new MimeMessage(Session.getDefaultInstance(new Properties()), is);
-            /*
-            if (charset != null)
-            {
-                mimeMessage.setHeader("Content-Type", "text/plain; charset=" + charset.name());
-                mimeMessage.setHeader("Content-Transfer-Encoding", "quoted-printable");
-            }
-            */
-            final StringBuilder sb = new StringBuilder();
-            Object content = mimeMessage.getContent();
-            if (content instanceof Multipart) {
-                boolean html = html();
-                Map<String, String> parts = new HashMap<String, String>();
-                processPreviewMultiPart((Multipart) content, parts);
-                String part = getPreview(parts, html);
-                if (part != null) {
-                    sb.append(part);
-                }
-                // sb.append(processPreviewMultiPart((Multipart) content));
-            } else {
-                sb.append(content.toString());
-            }
-            writer.putContent(sb.toString());
+            writer.putContent(createPreview(is));
         }
         /* finally
         {
@@ -150,6 +87,26 @@ public class EMLTransformer extends AbstractContentTransformer2 implements Appli
                 }
             }
         } */
+    }
+
+    // Just in case we want to try from a unit test
+    public String createPreview(InputStream is) throws MessagingException, IOException {
+        MimeMessage mimeMessage = new MimeMessage(Session.getDefaultInstance(new Properties()), is);
+        final StringBuilder sb = new StringBuilder();
+        Object content = mimeMessage.getContent();
+        if (content instanceof Multipart) {
+            boolean html = html();
+            Map<String, String> parts = new HashMap<String, String>();
+            processPreviewMultiPart((Multipart) content, parts);
+            String part = getPreview(parts, html);
+            if (part != null) {
+                sb.append(part);
+            }
+            // sb.append(processPreviewMultiPart((Multipart) content));
+        } else {
+            sb.append(content.toString());
+        }
+        return sb.toString();
     }
 
     private String getPreview(Map<String, String> parts, boolean html) {
@@ -249,7 +206,7 @@ public class EMLTransformer extends AbstractContentTransformer2 implements Appli
                 if (this.html == null) {
                     this.html = Boolean.FALSE;
                 }
-                logger.debug("{} = {} -> html = {}", new Object[] { transformerName, emlPipeLine, html });
+                logger.debug("{}={} -> html = {}", new Object[] { this.transformerName, emlPipeLine, html });
             }
             isHtml = this.html;
         }
